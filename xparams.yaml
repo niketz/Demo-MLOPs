@@ -1,0 +1,73 @@
+base:
+  project : xai-project
+  random_state : 42
+
+# CLASSIFICATION
+data_source:
+  X : data/processed/winequality-x.csv
+  y : data/processed/winequality-y.csv
+  X_train : data/processed/train_winequality-x.csv
+  y_train : data/processed/train_winequality-y.csv
+  X_test :  data/processed/test_winequality-x.csv
+  y_test : data/processed/test_winequality-y.csv
+
+estimators:
+  models : prediction_service/model/model.pkl
+  algorithm : "RandomForest"
+  mode : 'regression'
+  class_names : ['TARGET']
+
+# REGRESSION
+# data_source:
+#   X : ../data/reg_X.csv
+#   y : ../data/reg_Y.csv
+#   X_train : ../data/reg_train_X.csv
+#   y_train : ../data/reg_train_y.csv
+#   X_test : ../data/reg_test_X.csv
+#   y_test : ../data/reg_test_y.csv
+
+# estimators:
+#   models : ../model/reg_xgb_model.pkl
+#   algorithm : "XGBoost"
+#   mode : 'regression'
+#   class_names : ['HousePrice']
+
+row_index_to_explain : [0,1,5,9] #List as well
+
+target_class : 0
+
+# MULTICLASS CLASSIFICATION
+# data_source:
+#   X : ../data/multi_X.csv
+#   y : ../data/multi_y.csv
+#   X_train : ../data/multi_X_train.csv
+#   y_train : ../data/multi_y_train.csv
+#   X_test : ../data/multi_X_test.csv
+#   y_test : ../data/multi_y_test.csv
+
+# estimators:
+#   models : ../model/multiclass_rf_model.pkl
+#   algorithm : "RandomForest"
+#   mode : 'classification'
+#   class_names : ['Setosa', 'Versicolor', 'Virginica']
+
+reports:
+  global : ./reports/global
+  local : ./reports/local
+
+experiments:
+  estimators_1:
+    models : ../model/model.pkl
+    algorithm : "RandomForest"
+    mode : 'classification'
+    class_names : ['Loose MOM', 'Win MOM']
+  estimators_2:
+    models : ../model/model.pkl
+    algorithm : "RandomForest"
+    mode : 'classification'
+    class_names : ['Loose MOM', 'Win MOM']
+
+graphs:
+  permutation importance : True
+  partial dependency plot : True
+  shapley feature importance : True

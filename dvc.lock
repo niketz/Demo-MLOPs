@@ -1,0 +1,56 @@
+schema: '2.0'
+stages:
+  load_data:
+    cmd: python src/load_data.py --config=params.yaml
+    deps:
+    - path: data_source/winequality.csv
+      md5: ccc8d3507eb151f53f760d36abdef888
+      size: 91998
+    - path: src/get_data.py
+      md5: 711c67906af833fd61f2855817ee8fd8
+      size: 676
+    - path: src/load_data.py
+      md5: dcf996a87a9a81aa36fd1354855199c3
+      size: 670
+    outs:
+    - path: data/raw/winequality.csv
+      md5: dcb9f7736a81b73cf4cf803b5ef3f07e
+      size: 102550
+  split_data:
+    cmd: python src/split_data.py --config=params.yaml
+    deps:
+    - path: data/raw/winequality.csv
+      md5: dcb9f7736a81b73cf4cf803b5ef3f07e
+      size: 102550
+    - path: src/split_data.py
+      md5: e5fde2ae77bea6b7ebba59fd30c10ced
+      size: 2170
+    outs:
+    - path: data/processed/test_winequality.csv
+      md5: 0a6556ee447490196cd71552b02e0a44
+      size: 24288
+    - path: data/processed/train_winequality.csv
+      md5: e2b2cdb5dfdafa74fc954a4fb98a4f29
+      size: 72479
+  train_and_evaluate:
+    cmd: python src/train_and_evaluate.py --config=params.yaml
+    deps:
+    - path: data/processed/test_winequality.csv
+      md5: 0a6556ee447490196cd71552b02e0a44
+      size: 24288
+    - path: data/processed/train_winequality.csv
+      md5: e2b2cdb5dfdafa74fc954a4fb98a4f29
+      size: 72479
+    - path: src/train_and_evaluate.py
+      md5: d1a08f77a4c1c070b978050edc4fb6dc
+      size: 4435
+    params:
+      params.yaml:
+        estimators.RandomForestRegressor.params.max_depth: None
+        estimators.RandomForestRegressor.params.n_estimators: 150
+  log_production_model:
+    cmd: python src/log_production_model.py --config=params.yaml
+    deps:
+    - path: src/log_production_model.py
+      md5: 809fec1715ed15d75f7058ddd1c1a62a
+      size: 1811

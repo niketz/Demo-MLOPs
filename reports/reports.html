@@ -1,0 +1,740 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        * {
+            /* font-family: sans-serif;  */
+            font-family: serif; 
+            /* font-family: cursive; */
+            font-family: inherit;
+            box-sizing: border-box;
+            color: #777;
+        }
+        body {
+            padding: 20px;
+            font-size: 17px;
+            /* background-color:aliceblue; */
+        }
+        li {
+            margin: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            /* text-align: right; */
+            /* display: table; */
+            /* margin-top: 15px; */
+            border: 1px solid #e1e1e8;
+        }
+        table tr {
+            /* border-bottom: 1px solid; */
+            display: table-cell;
+        }
+        table th, table td {
+            padding: 10px 30px;
+            border: 1px solid #e1e1e8;
+        }
+        table tr td {
+            display: block;
+        }
+        th, td {
+            padding: 5px;
+            text-align: center;
+            font-size: 17px;
+        }
+        th {
+            width: 50%;
+        }
+        /* table th{ 
+            text-align: center; 
+        } */
+        img {
+          image-rendering: auto;
+          image-rendering: crisp-edges;
+        }
+        iframe{
+            border-style: none;
+        }
+        .permimp, .pdp, .shap-feat-imp, .shap-summary, .lime, .shap-loc, .global, .local, .exctsummary{
+            border: 1px solid #122e82;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .all_imp span::after {
+            content: ', '; 
+        }
+        .all_imp span:last-child::after {
+            content: ''; 
+        }
+        .pdp img{
+            margin: 30px;
+        }
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+        .topnav {
+            overflow: hidden;
+            background-color: #122e82;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+        .topnav a {
+            float: left;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            text-decoration: none;
+        }
+        .topnav p {
+            float: left;
+            color: #777;
+            text-align: center;
+        }
+        .topnav-right {
+            float: right;
+            color: #fff;
+        }
+        /* .topnav-right a:hover {
+            color: #333;
+        } */
+        #top {
+            margin-top: 50px;
+        }
+        .heading {
+            color: #555;
+        }
+        .padL10 {
+           padding-left: 10px;
+        }
+        .padB20 {
+          padding-bottom: 20px;
+        }
+        .padR10 {
+          padding-right: 10px;
+        }
+        .padLR30 {
+            padding-right: 30px;
+            padding-left: 30px;
+        }
+        .row {
+            width: 100%;
+            float: left;
+        }
+        .width50per {
+            width: 50%;
+        }
+        .floatL {
+            float: left;
+        }
+        .item-list {
+            list-style: none;
+            float: left;
+            width: 100%;
+            margin: 0;
+            padding: 10px 0 0 0;
+        }
+        .item-list li {
+            border-top: 1px solid #e1e1e8;
+            float: left;
+            width: 100%;
+            padding: 10px 10px 10px 0px;
+        }
+        .item-list li label {
+            width: 70%;
+            float: left;
+            font-size: 17px;
+            color: #555;
+            font-weight: 600;
+        }
+        .item-list li span {
+            width: 30%;
+            float: left;
+            color: #777;
+        }
+        .borderBox {
+            border: 1px solid #122e82;
+        }
+        .pad10 {
+            padding: 20px;
+        }
+        .permimp, .pdp, .shap-feat-imp, .shap-summary, .lime, .shap-loc, .global, .local, .exctsummary{
+            width: 100%;
+            float: left;
+        }
+        .lime, .shap-loc {
+            margin-bottom: 30px;
+        }
+        .width50per h2 {
+            margin-bottom: 0px;
+        }
+        .selectOpt select {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 20%;
+            border-radius: 5px;
+            height: 30px;
+            font-size: 17px;
+            font-family: serif; 
+        }
+        .selectOpt {
+            padding: 20px;
+            position: relative;
+            box-sizing: border-box;
+            padding-bottom: 35px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- <div class="navbar">
+    <h1>Untangle AI Explainability</h1>
+    <div class="navbar-right">    
+    <ul>
+        <li><a href="#permimp">Permutation</a></li>
+        <li><a href="#shap-feat-imp">Shap Feat</a></li>
+        <li><a href="#shap-summary">Shap Summary</a></li>
+        <li><a href="#pdp">PDP</a></li>
+    </ul>
+    </div>
+</div> -->
+
+<div class="topnav">
+    <a href="#"><strong><span style="font-size: 20px; color: #fff;">Untangle AI Explainability</span></strong></a>
+    <div class="topnav-right">
+        <a href="#exctsummary">Summary</a>
+        <a href="#global">Global</a>
+        <a href="#shap-select">Feature Importance</a>
+        <a href="#pdp">PDP</a>
+        <a href="#local">Local</a>
+        <!-- <a href="#exctsummary">Summary</a> -->
+    </div>
+</div>
+
+<h1 id="top" class="heading">Model Explanation Report</h1>
+
+<div class="row borderBox pad10" id="exctsummary">
+    <h1 style="text-align: center;" class="heading">EXECUTIVE SUMMARY</h1> 
+    <div style="margin-top:10px; border:1px solid #e1e1e8; padding-left: 10px; float: left; width: 100%; margin-bottom: 40px;">
+    <p style="font-size: 20px;">The objective of this usecase is to predict TARGET. The Regression model used here is RandomForest. 
+        The model takes 11 input features to make the prediction.
+        The target classes in this problem statement are TARGET.
+        <br><br>
+        The top 5 most important features identified in this experiment are -
+        <div class="all_imp">
+            
+            <span style="font-size: 20px;">alcohol</span>
+            
+            <span style="font-size: 20px;">sulphates</span>
+            
+            <span style="font-size: 20px;">volatile_acidity</span>
+            
+            <span style="font-size: 20px;">total_sulfur_dioxide</span>
+            
+            <span style="font-size: 20px;">free_sulfur_dioxide</span>
+            
+        </div>
+    </p>
+    </div>
+    <h1 style="text-align: center;" class="heading">MODEL INSIGHTS</h1>
+    <div style="margin-top:10px; border:1px solid #e1e1e8; padding-left: 10px; float: left; width: 100%;">
+    <h3 class="heading">Most important features according to Permutation Importance are as below</h3>
+    <div class="all_imp" style="padding-bottom: 20px">
+        
+        <span>alcohol</span>
+        
+        <span>sulphates</span>
+        
+        <span>volatile_acidity</span>
+        
+        <span>total_sulfur_dioxide</span>
+        
+        <span>free_sulfur_dioxide</span>
+        
+    </div>
+    </div>
+    <div style="margin-top:10px; border:1px solid #e1e1e8; padding-left: 10px; float: left; width: 100%;">
+    <h3 class="heading">Most important features according to Shap Feature Importance are as below</h3>
+    <div class="all_imp" style="padding-bottom: 20px">
+        
+        <span>alcohol</span>
+        
+        <span>sulphates</span>
+        
+        <span>volatile_acidity</span>
+        
+        <span>total_sulfur_dioxide</span>
+        
+        <span>chlorides</span>
+        
+    </div>
+    </div>
+    <div style="margin-top:10px; border:1px solid #e1e1e8; padding-left: 10px; float: left; width: 100%; margin-bottom: 40px;">
+    <h3 class="heading">Most important features after considering both the Permutation Importance and the Shap Feature Importance are as below</h3>
+    <div class="all_imp" style="padding-bottom: 20px">
+        
+        <span>alcohol</span>
+        
+        <span>sulphates</span>
+        
+        <span>volatile_acidity</span>
+        
+        <span>total_sulfur_dioxide</span>
+        
+        <span>free_sulfur_dioxide</span>
+        
+    </div>
+    </div>
+    <h1 style="text-align: center;" class="heading">DATASET SUMMARY</h1>
+    <div class="row padLR30" style="border:1px solid #e1e1e8; margin-bottom: 30px;">
+      <div class="width50per floatL padR10">
+        <h2 class="heading">Dataset Statistics</h2>
+        <ul class="item-list">
+          <li>
+            <label class="heading">Number Of Variables</label>
+            <span>11</span>
+          </li>
+          <li>
+            <label class="heading">Number Of Observations</label>
+            <span>1599</span>
+          </li>
+          <li>
+            <label class="heading">Number Of Training Observations</label>
+            <span>1199</span>
+          </li>
+          <li>
+            <label class="heading">Number of Testing Observations</label>
+            <span>400</span>
+          </li>
+          <li>
+            <label class="heading">Model Name</label>
+            <span>RandomForest</span>
+          </li>
+          <li>
+            <label class="heading">Operation Type</label>
+            <span>Regression</span>
+          </li>
+          <!-- <li>
+            <label class="heading">Number of variables</label>
+            <span>27</span>
+          </li>
+          <li>
+            <label class="heading">Number of variables</label>
+            <span>27</span>
+          </li> -->
+        </ul>
+      </div>
+      <div class="width50per floatL padL10">
+        <h2 class="heading">Feature Statistics</h2>
+        <ul class="item-list">
+          <li>
+            <label class="heading">Target Name</label>
+            <span>TARGET</span>
+          </li>
+          <li>
+            <label class="heading">Target Class Names</label>
+            <span>TARGET</span>
+          </li>
+          <li>
+            <label class="heading">Features</label>
+            <span>fixed_acidity, volatile_acidity, citric_acid, residual_sugar, chlorides, free_sulfur_dioxide, total_sulfur_dioxide, density, pH, sulphates, alcohol</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+</div>
+
+<div class='global' id='global' style="background-color: #122e82">
+    <h1 style="font-size: 20px; width: 100%; text-align: center; color: #fff">MODEL LEVEL EXPLANATION</h1>
+</div>
+
+<!-- <embed src='C:\Users\a817177\ATOS\xai\untangleai\reports\global\eli5\permutation_importance_plot.pdf' width='500px' height='500px'></embed> -->
+<div class="permimp" id="permimp"> 
+    <h1 style="text-align: center;" class="heading">PERMUTATION FEATURE IMPORTANCE</h1> 
+    <div>
+        <p style="text-align: center">
+            <iframe src='global\eli5\permutation_importance_weights.html' style="width: 27%;height: 55%; border:1px solid #e1e1e8; padding-left: 5px;"></iframe>
+        </p>
+    </div>
+    
+    <h2 class="heading">One of the most basic questions we might ask, which features have the biggest impact on model predictions?</h2>
+
+    <h4 class="heading">Permutation Importance plot helps us answer the question.</h4>
+
+    <ul>
+        <li>A feature is considered to be important if the model's predictive power drops in case we randomly shuffle it's value for prediction.</li>
+        <li>Similarly model performance may not change or even it may improve if that feature does not have any predictive power .These features can be dropped during model creation.</li>
+        <li>The values towards the top are the most important features, and those towards the bottom matter least.</li>
+    </ul>
+
+    <h3><p style="text-align: center;border:1px solid #e1e1e8; padding:5px;" class="heading">Table For 5 Most Significant and 5 Most Non-Significant Features</p></h3>
+
+    <table style="width:100%">
+        <tr>
+            <th class="heading">Most Significant Features Are Listed Below</th>
+            
+            <td>alcohol</td>
+            
+            <td>sulphates</td>
+            
+            <td>volatile_acidity</td>
+            
+            <td>total_sulfur_dioxide</td>
+            
+            <td>free_sulfur_dioxide</td>
+            
+        </tr>
+        <tr>
+            <th class="heading">Non Significant Features Are Listed Below</th>
+            
+            <td>density</td>
+            
+            <td>-----</td>
+            
+            <td>-----</td>
+            
+            <td>-----</td>
+            
+            <td>-----</td>
+            
+        </tr>
+    </table>
+    <div>
+        <h2 style="text-align: center;border:1px solid #e1e1e8; padding:5px;" class="heading">Recommendations</h2>
+        <h3 class="heading">We can consider the below features for model building-</h3>
+        <div class="all_imp">
+        
+        <span>alcohol</span>
+        
+        <span>sulphates</span>
+        
+        <span>volatile_acidity</span>
+        
+        <span>total_sulfur_dioxide</span>
+        
+        <span>free_sulfur_dioxide</span>
+        
+        <span>chlorides</span>
+        
+        <span>fixed_acidity</span>
+        
+        <span>pH</span>
+        
+        <span>citric_acid</span>
+        
+        <span>residual_sugar</span>
+        
+        </div>
+    </div>
+</div>
+
+<div class="row selectOpt" id="shap-select" style="margin-top:10px">
+    <select name="shapPlots" id="shapPlots-select" >
+        <option value="featimp">Shap Feature Importance</option>
+        <option value="sumplot">Shap Summary Plot</option>
+    </select>
+</div>
+
+<div class="shap-feat-imp" id="shap-feat-imp">  
+    <h1 style="text-align: center;" class="heading">SHAP FEATURE IMPORTANCE</h1>
+    <div style="border:1px solid #e1e1e8">
+        <img class='center' src="global\shap\shap_temp\correlation_feature_importance.png" height='70%' width='50%'></img>
+    </div>
+    <ul>
+        <li>Shap feature importance plot provides the importance for each feature towards making a prediction.</li>
+        <li>Features with large absolute Shapley values are important.</li>
+        <li>Features in Red color are positively Correlated while features in Blue color are negatively correlated with the output.</li>
+        <!-- <li>SHAP feature importance is an alternative to permutation feature importance. There is a big difference between both importance measures:</li>
+        <ul>
+            <li>Permutation feature importance is based on the decrease in model performance.</li>
+            <li>SHAP is based on magnitude of feature attributions.</li>
+        </ul> -->
+    </ul>
+    <div>
+        <h2 style="text-align: center;border:1px solid #e1e1e8; padding:5px;" class="heading">Recommendations</h2>
+        <h3 class="heading">Top most important features for model building are as below-</h3>
+        <div class="all_imp">
+        
+        <span>alcohol</span>
+        
+        <span>sulphates</span>
+        
+        <span>volatile_acidity</span>
+        
+        <span>total_sulfur_dioxide</span>
+        
+        <span>chlorides</span>
+        
+        </div>
+    </div>
+</div>
+
+<div class="shap-summary" id="shap-summary" style="display: none;">  
+    <h1 class="heading" style="text-align: center;">SHAP FEATURE SUMMARY</h1>
+    <div style="border:1px solid #e1e1e8">
+        <img class='center' src="global\shap\shap_temp\summary_plot.png" height='70%' width='50%'></img>
+    </div>
+    <ul>
+        <li>The summary plot combines feature importance with feature effects.</li>
+        <li>Each point on the summary plot is a Shapley value for a feature and an instance.</li>
+        <li>The position on the y-axis is determined by the feature and on the x-axis by the Shapley value.</li>
+        <li>The color represents the value of the feature from low(blue) to high(red).</li>
+        <li>Overlapping points are jittered in y-axis direction, so we get a sense of the distribution of the Shapley values per feature.</li>
+        <li>SHAP summary plots give us a birds-eye view of feature importance and what is driving it.</li>
+    </ul>
+</div>
+
+<div class="pdp" id="pdp">  
+    <h1 class="heading" style="text-align: center;">PARTIAL DEPENDENCE PLOT</h1>
+    <div style="border:1px solid #e1e1e8">
+        
+        <img src="global\pdp\pdp_temp\fixed_acidity.png" height='70%' width='45%' float='left'></img>
+        
+        <img src="global\pdp\pdp_temp\volatile_acidity.png" height='70%' width='45%' float='left'></img>
+        
+        <img src="global\pdp\pdp_temp\citric_acid.png" height='70%' width='45%' float='left'></img>
+        
+        <img src="global\pdp\pdp_temp\residual_sugar.png" height='70%' width='45%' float='left'></img>
+        
+        <img src="global\pdp\pdp_temp\chlorides.png" height='70%' width='45%' float='left'></img>
+        
+        <img src="global\pdp\pdp_temp\free_sulfur_dioxide.png" height='70%' width='45%' float='left'></img>
+        
+        <img src="global\pdp\pdp_temp\total_sulfur_dioxide.png" height='70%' width='45%' float='left'></img>
+        
+        <img src="global\pdp\pdp_temp\density.png" height='70%' width='45%' float='left'></img>
+        
+        <img src="global\pdp\pdp_temp\pH.png" height='70%' width='45%' float='left'></img>
+        
+        <img src="global\pdp\pdp_temp\sulphates.png" height='70%' width='45%' float='left'></img>
+        
+        <img src="global\pdp\pdp_temp\alcohol.png" height='70%' width='45%' float='left'></img>
+        
+    </div>
+    
+    <h2 class="heading">The next questions we might ask, how a particular features affects predictions?</h2>
+
+    <h4 class="heading">Partial Dependence plot helps us answer the question.</h4>
+    <ul>
+    <li>The partial dependence plot (short PDP or PD plot) shows the effect a features have on the predicted outcome of a machine learning model keeping the value of all other features fixed.</li>
+    <li>A few items are worth pointing out as you interpret this plot</li>
+    <ul>
+        <li>The y axis is interpreted as change in the prediction from what it would be predicted at the baseline or leftmost value.</li>
+        <li>A blue shaded area indicates level of confidence.</li>
+    </ul>
+    <!-- <li>Increasing Knee is the value at which you get the best performance</li>
+    <li>Decreasing Knee is the value after which the performance tends to decrease</li> -->
+    <li>Knee is the value at which you get the best performance.</li>
+        <ul>
+            <!-- <li>NOTE - If there are no Decreasing Knee the right most value is considered as the default Decreasing Knee</li> -->
+            <li>NOTE - Feature must have atleast two distinct values to find out the Knee points</li>
+        </ul>
+    </ul>
+</div>
+
+<div class='local' id='local' style="background-color: #122e82">
+    <h1 style="font-size: 20px; width: 100%; text-align: center; color: #fff;">DATA LEVEL EXPLANATION</h1>
+</div>
+
+<div class="row selectOpt" id="local-select" style="margin-top:10px">
+    <select name="plots" id="plots-select" >
+        <option value="lime">Lime Local Explanation</option>
+        <option value="shap">Shap Local Explanation</option>
+    </select>
+</div>
+
+<div class="lime" id="lime">  
+    <h1 class="heading" style="text-align: center;">LIME LOCAL EXPLANATION</h1>
+    <div>
+        
+        <div style="margin-top:10px; border:1px solid #e1e1e8;">
+        <h4 style="text-align: center">This explanation is for row number 0 from Test Dataset</h4>
+        <iframe src="local\lime\lime_exp_for_row_0_.html" style="height:35%; width:100%; padding-top:15px;"></iframe>
+        </div>
+        
+        <div style="margin-top:10px; border:1px solid #e1e1e8;">
+        <h4 style="text-align: center">This explanation is for row number 1 from Test Dataset</h4>
+        <iframe src="local\lime\lime_exp_for_row_1_.html" style="height:35%; width:100%; padding-top:15px;"></iframe>
+        </div>
+        
+        <div style="margin-top:10px; border:1px solid #e1e1e8;">
+        <h4 style="text-align: center">This explanation is for row number 5 from Test Dataset</h4>
+        <iframe src="local\lime\lime_exp_for_row_5_.html" style="height:35%; width:100%; padding-top:15px;"></iframe>
+        </div>
+        
+        <div style="margin-top:10px; border:1px solid #e1e1e8;">
+        <h4 style="text-align: center">This explanation is for row number 9 from Test Dataset</h4>
+        <iframe src="local\lime\lime_exp_for_row_9_.html" style="height:35%; width:100%; padding-top:15px;"></iframe>
+        </div>
+        
+    </div>
+    <!-- <div>
+        <p style="text-align: center">
+            <iframe src='global\eli5\permutation_importance_weights.html'style="width: 27%;height: 55%; border:1px solid #e1e1e8; padding-left: 5px;"></iframe>
+        </p>
+    </div> -->
+    <!-- <h2 class="heading">The next questions we might ask of a model is: How a particular features affects predictions?</h2>
+
+    <h4 class="heading">Partial Dependence plot helps us answer the question.</h4> -->
+    <ul>
+    <li>On the left column, probabilities for the individual prediction is present.</li>
+    <li>In the center, top most significant features and its contribution towards prediction in precentage are present.</li>
+    <li>On the right column, most significant features and its values for a particular record is present.</li>
+    </ul>
+</div>
+
+<div class="shap-loc" id="shap-loc" style="display: none;">  
+    <h1 class="heading" style="text-align: center;">SHAP LOCAL EXPLANATION</h1>
+    <div>
+        <!-- <h4 class="heading">The below explanations are from Test Dataset</h4> -->
+        
+        <div style="margin-top:10px; border:1px solid #e1e1e8;">
+        <h4 style="text-align: center">This explanation is for row number 0 from Test Dataset</h4>
+        <iframe src="local\shap\shap_temp\shap_loce_0_.html" style="height:35%; width:100%; padding-top:15px;"></iframe>
+        </div>
+        
+        <div style="margin-top:10px; border:1px solid #e1e1e8;">
+        <h4 style="text-align: center">This explanation is for row number 1 from Test Dataset</h4>
+        <iframe src="local\shap\shap_temp\shap_loce_1_.html" style="height:35%; width:100%; padding-top:15px;"></iframe>
+        </div>
+        
+        <div style="margin-top:10px; border:1px solid #e1e1e8;">
+        <h4 style="text-align: center">This explanation is for row number 5 from Test Dataset</h4>
+        <iframe src="local\shap\shap_temp\shap_loce_5_.html" style="height:35%; width:100%; padding-top:15px;"></iframe>
+        </div>
+        
+        <div style="margin-top:10px; border:1px solid #e1e1e8;">
+        <h4 style="text-align: center">This explanation is for row number 9 from Test Dataset</h4>
+        <iframe src="local\shap\shap_temp\shap_loce_9_.html" style="height:35%; width:100%; padding-top:15px;"></iframe>
+        </div>
+        
+    </div>
+    <!-- <div>
+        <p style="text-align: center">
+            <iframe src='global\eli5\permutation_importance_weights.html'style="width: 27%;height: 55%; border:1px solid #e1e1e8; padding-left: 5px;"></iframe>
+        </p>
+    </div> -->
+    <!-- <h2 class="heading">The next questions we might ask of a model is: How a particular features affects predictions?</h2>
+
+    <h4 class="heading">Partial Dependence plot helps us answer the question.</h4> -->
+    <ul>
+    <li>The output value is the prediction for an observation from the Test Dataset.</li>
+    <li>Base value is the average prediction if no features would have been present for an observation.</li>
+    <li>Features that push the prediction higher (to the right) are shown in red.</li>
+    <li>Features that push the prediction lower (to the left) are shown in blue.</li>
+    </ul>
+</div>
+
+<!-- <div class="exctsummary" id="exctsummary">
+    <h1 style="text-align: center;" class="heading">EXECUTIVE SUMMARY</h1> 
+    <div style="margin-top:10px; border:1px solid #e1e1e8; padding-left: 10px;">
+    <h3 class="heading">Most important features according to Permutation Importance are as below</h3>
+    <div class="all_imp" style="padding-bottom: 20px">
+        
+        <span>alcohol</span>
+        
+        <span>sulphates</span>
+        
+        <span>volatile_acidity</span>
+        
+        <span>total_sulfur_dioxide</span>
+        
+        <span>free_sulfur_dioxide</span>
+        
+    </div>
+    </div>
+    <div style="margin-top:10px; border:1px solid #e1e1e8; padding-left: 10px;">
+    <h3 class="heading">Most important features according to Shap Feature Importance are as below</h3>
+    <div class="all_imp" style="padding-bottom: 20px">
+        
+        <span>alcohol</span>
+        
+        <span>sulphates</span>
+        
+        <span>volatile_acidity</span>
+        
+        <span>total_sulfur_dioxide</span>
+        
+        <span>chlorides</span>
+        
+    </div>
+    </div>
+    <div style="margin-top:10px; border:1px solid #e1e1e8; padding-left: 10px;">
+    <h3 class="heading">Most important features after considering both the Permutation Importance and the Shap Feature Importance are as below</h3>
+    <div class="all_imp" style="padding-bottom: 20px">
+        
+        <span>alcohol</span>
+        
+        <span>sulphates</span>
+        
+        <span>volatile_acidity</span>
+        
+        <span>total_sulfur_dioxide</span>
+        
+        <span>free_sulfur_dioxide</span>
+        
+    </div>
+    </div>
+</div> -->
+
+<script>
+    $(".topnav a").click(function () {
+        $('html, body').animate({ scrollTop: $(this.hash).offset().top - 63 }, 1000);
+    });
+    $(document).ready(function () {
+        $('#plots-select').on('change', function () {
+            if ((this.value == 'lime') && (this.value == 'lime')) {
+                $(".shap-loc").hide();
+                $(".lime").show();
+            } else {
+                $(".lime").hide();
+                $(".shap-loc").show();
+            }
+        });
+    });
+    $(document).ready(function () {
+        $('#shapPlots-select').on('change', function () {
+            if (this.value == 'featimp') {
+                $(".shap-summary").hide();
+                $(".shap-feat-imp").show();
+            } else {
+                $(".shap-feat-imp").hide();
+                $(".shap-summary").show();
+            }
+        });
+    });
+</script>
+
+<!-- <div><h2>Shap Plot</h2>
+    <embed src='global\shap\compiled_shap_plot.pdf' width='500px' height='500px' float='right'></embed>
+</div>
+
+<div>
+    
+    <img src="global\shap\shap_temp\summary_plot.png" height='50%' width='45%' float='left'></img>
+    
+    <img src="global\shap\shap_temp\feature_importance.png" height='50%' width='45%' float='left'></img>
+    
+    <img src="global\shap\shap_temp\explainer_bar_all_cls_.png" height='50%' width='45%' float='left'></img>
+    
+    <img src="global\shap\shap_temp\correlation_feature_importance.png" height='50%' width='45%' float='left'></img>
+    
+</div>
+<div>
+    <h2>Shap Plot Explanations</h2>
+    <p>EXp...............</p>
+</div> -->
+
+
+</body>
+
+</body>
+</html>

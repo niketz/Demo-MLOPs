@@ -1,0 +1,58 @@
+base:
+  project: winequality-project
+  random_state: 100
+  target_col: TARGET
+
+data_source:
+  s3_source: data_source/winequality.csv #Could be any remote source
+
+load_data:
+  raw_dataset_csv: data/raw/winequality.csv
+
+split_data:
+  train_path: data/processed/train_winequality.csv
+  test_path: data/processed/test_winequality.csv
+  predictors_path: data/processed/winequality-x.csv
+  taget_path: data/processed/winequality-y.csv
+  train_x_path: data/processed/train_winequality-x.csv
+  train_y_path: data/processed/train_winequality-y.csv
+  test_x_path: data/processed/test_winequality-x.csv
+  test_y_path: data/processed/test_winequality-y.csv
+
+  test_size: 0.25
+
+# estimators:
+#   ElasticNet:
+#     params:
+#       alpha: 0.88
+#       l1_ratio: 0.89
+#       # alpha: 0.9
+#       # l1_ratio: 0.4
+#       # alpha: 0.95
+#       # l1_ratio: 0.47
+# model_dir: saved_models
+
+estimators:
+  RandomForestRegressor:
+    params:
+      n_estimators: 150
+      max_depth: None
+#       # alpha: 0.9
+#       # l1_ratio: 0.4
+#       # alpha: 0.95
+#       # l1_ratio: 0.47
+model_dir: saved_models
+
+reports:
+  params: reports/params.json
+  scores: reports/scores.json
+
+webapp_model_dir: prediction_service/model/model.joblib
+
+mlflow_config:
+  artifacts_dir: artifacts
+  experiment_name: Regression
+  run_name: mlops
+  registered_model_name: RandomForestRegressor
+  #remote_server_uri: http://0.0.0.0:1234
+  remote_server_uri: http://127.0.0.1:1234
