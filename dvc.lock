@@ -46,8 +46,8 @@ stages:
       size: 4435
     params:
       params.yaml:
-        estimators.RandomForestRegressor.params.max_depth: 10
-        estimators.RandomForestRegressor.params.n_estimators: 200
+        estimators.RandomForestRegressor.params.max_depth: None
+        estimators.RandomForestRegressor.params.n_estimators: 150
   log_production_model:
     cmd: python src/log_production_model.py --config=params.yaml
     deps:
