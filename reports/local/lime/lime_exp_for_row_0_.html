@@ -37089,25 +37089,25 @@
 /***/ })
 /******/ ]);
 //# sourceMappingURL=bundle.js.map </script></head><body>
-        <div class="lime top_div" id="top_div9GAD7Z68KC2XZMJ"></div>
+        <div class="lime top_div" id="top_divW4QR8RGRFYWM7BQ"></div>
         
         <script>
-        var top_div = d3.select('#top_div9GAD7Z68KC2XZMJ').classed('lime top_div', true);
+        var top_div = d3.select('#top_divW4QR8RGRFYWM7BQ').classed('lime top_div', true);
         
         
                     var pp_div = top_div.append('div')
                                         .classed('lime predicted_value', true);
                     var pp_svg = pp_div.append('svg').style('width', '100%');
-                    var pp = new lime.PredictedValue(pp_svg, 5.88, 4.28, 7.16);
+                    var pp = new lime.PredictedValue(pp_svg, 5.88, 4.12, 7.19);
                     
         var exp_div;
             var exp = new lime.Explanation(["negative", "positive"]);
         
             exp_div = top_div.append('div').classed('lime explanation', true);
-            exp.show([["volatile_acidity > 0.64", -0.23990303815115357], ["0.62 < sulphates <= 0.73", 0.1581997879262736], ["22.00 < total_sulfur_dioxide <= 38.00", 0.056451444086333256], ["citric_acid <= 0.10", 0.04523597209010171], ["0.07 < chlorides <= 0.08", 0.036609008901390155]], 1, exp_div);
+            exp.show([["volatile_acidity > 0.64", -0.22832849302299651], ["0.62 < sulphates <= 0.73", 0.1369145646904744], ["22.00 < total_sulfur_dioxide <= 38.00", 0.061113242499331706], ["0.07 < chlorides <= 0.08", 0.028657293658672176], ["residual_sugar <= 1.90", -0.023750386119240963]], 1, exp_div);
             
         var raw_div = top_div.append('div');
-            exp.show_raw_tabular([["volatile_acidity", "0.70", -0.23990303815115357], ["sulphates", "0.69", 0.1581997879262736], ["total_sulfur_dioxide", "35.00", 0.056451444086333256], ["citric_acid", "0.06", 0.04523597209010171], ["chlorides", "0.08", 0.036609008901390155]], 1, raw_div);
+            exp.show_raw_tabular([["volatile_acidity", "0.70", -0.22832849302299651], ["sulphates", "0.69", 0.1369145646904744], ["total_sulfur_dioxide", "35.00", 0.061113242499331706], ["chlorides", "0.08", 0.028657293658672176], ["residual_sugar", "1.90", -0.023750386119240963]], 1, raw_div);
         
         </script>
         </body></html>

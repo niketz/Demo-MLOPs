@@ -35,8 +35,8 @@ split_data:
 estimators:
   RandomForestRegressor:
     params:
-      n_estimators: 150
-      max_depth: None
+      n_estimators: 200
+      max_depth: 10
 #       # alpha: 0.9
 #       # l1_ratio: 0.4
 #       # alpha: 0.95

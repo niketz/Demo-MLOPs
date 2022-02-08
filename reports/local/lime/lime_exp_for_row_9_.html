@@ -37089,25 +37089,25 @@
 /***/ })
 /******/ ]);
 //# sourceMappingURL=bundle.js.map </script></head><body>
-        <div class="lime top_div" id="top_divSD79I6KPM933DM7"></div>
+        <div class="lime top_div" id="top_divHXTPK0VJ9VX3MD7"></div>
         
         <script>
-        var top_div = d3.select('#top_divSD79I6KPM933DM7').classed('lime top_div', true);
+        var top_div = d3.select('#top_divHXTPK0VJ9VX3MD7').classed('lime top_div', true);
         
         
                     var pp_div = top_div.append('div')
                                         .classed('lime predicted_value', true);
                     var pp_svg = pp_div.append('svg').style('width', '100%');
-                    var pp = new lime.PredictedValue(pp_svg, 6.56, 4.3, 7.08);
+                    var pp = new lime.PredictedValue(pp_svg, 6.56, 4.18, 7.03);
                     
         var exp_div;
             var exp = new lime.Explanation(["negative", "positive"]);
         
             exp_div = top_div.append('div').classed('lime explanation', true);
-            exp.show([["alcohol > 11.00", 0.7227311209759363], ["sulphates <= 0.55", -0.33243169595704164], ["volatile_acidity <= 0.40", 0.18286771352046105], ["total_sulfur_dioxide <= 22.00", 0.11966471405825647], ["fixed_acidity <= 7.10", -0.04705275448687992]], 1, exp_div);
+            exp.show([["alcohol > 11.00", 0.7313387203700513], ["sulphates <= 0.55", -0.33313885302855756], ["volatile_acidity <= 0.40", 0.1984110285176996], ["total_sulfur_dioxide <= 22.00", 0.10351551354688501], ["fixed_acidity <= 7.10", -0.03943178691322122]], 1, exp_div);
             
         var raw_div = top_div.append('div');
-            exp.show_raw_tabular([["alcohol", "12.80", 0.7227311209759363], ["sulphates", "0.55", -0.33243169595704164], ["volatile_acidity", "0.36", 0.18286771352046105], ["total_sulfur_dioxide", "8.00", 0.11966471405825647], ["fixed_acidity", "6.80", -0.04705275448687992]], 1, raw_div);
+            exp.show_raw_tabular([["alcohol", "12.80", 0.7313387203700513], ["sulphates", "0.55", -0.33313885302855756], ["volatile_acidity", "0.36", 0.1984110285176996], ["total_sulfur_dioxide", "8.00", 0.10351551354688501], ["fixed_acidity", "6.80", -0.03943178691322122]], 1, raw_div);
         
         </script>
         </body></html>

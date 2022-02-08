@@ -14,43 +14,49 @@ stages:
       size: 670
     outs:
     - path: data/raw/winequality.csv
-      md5: dcb9f7736a81b73cf4cf803b5ef3f07e
-      size: 102550
+      md5: d98e8f2eca228c11c4de1cc96866a54d
+      size: 91998
   split_data:
     cmd: python src/split_data.py --config=params.yaml
     deps:
     - path: data/raw/winequality.csv
-      md5: dcb9f7736a81b73cf4cf803b5ef3f07e
-      size: 102550
+      md5: d98e8f2eca228c11c4de1cc96866a54d
+      size: 91998
     - path: src/split_data.py
       md5: e5fde2ae77bea6b7ebba59fd30c10ced
       size: 2170
     outs:
     - path: data/processed/test_winequality.csv
-      md5: 0a6556ee447490196cd71552b02e0a44
-      size: 24288
+      md5: 5371e811bd4563950356820e6360b4ab
+      size: 23153
     - path: data/processed/train_winequality.csv
-      md5: e2b2cdb5dfdafa74fc954a4fb98a4f29
-      size: 72479
+      md5: add70d33a0f895de4adc28f5538e6111
+      size: 68990
   train_and_evaluate:
     cmd: python src/train_and_evaluate.py --config=params.yaml
     deps:
     - path: data/processed/test_winequality.csv
-      md5: 0a6556ee447490196cd71552b02e0a44
-      size: 24288
+      md5: 5371e811bd4563950356820e6360b4ab
+      size: 23153
     - path: data/processed/train_winequality.csv
-      md5: e2b2cdb5dfdafa74fc954a4fb98a4f29
-      size: 72479
+      md5: add70d33a0f895de4adc28f5538e6111
+      size: 68990
     - path: src/train_and_evaluate.py
       md5: d1a08f77a4c1c070b978050edc4fb6dc
       size: 4435
     params:
       params.yaml:
-        estimators.RandomForestRegressor.params.max_depth: None
-        estimators.RandomForestRegressor.params.n_estimators: 150
+        estimators.RandomForestRegressor.params.max_depth: 10
+        estimators.RandomForestRegressor.params.n_estimators: 200
   log_production_model:
     cmd: python src/log_production_model.py --config=params.yaml
     deps:
     - path: src/log_production_model.py
       md5: 809fec1715ed15d75f7058ddd1c1a62a
       size: 1811
+  explainableai:
+    cmd: python src/explainableai.py
+    deps:
+    - path: xparams.yaml
+      md5: 37174e37be60ce31f3520c34d3eab4f8
+      size: 1849
